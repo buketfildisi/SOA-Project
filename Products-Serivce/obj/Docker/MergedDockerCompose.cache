@@ -1,0 +1,39 @@
+name: dockercompose16160269148051367733
+services:
+  productdb:
+    container_name: product-db
+    environment:
+      ACCEPT_EULA: "Y"
+      SA_PASSWORD: password@12345#
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    networks:
+      backend: null
+    ports:
+    - mode: ingress
+      target: 1433
+      published: "18001"
+      protocol: tcp
+  productwebapi:
+    build:
+      context: C:\Users\Buket Fildisi\source\repos\GroupSOAProject\SOA-Project\Products-Serivce
+      dockerfile: ProductWebApi/Dockerfile
+    container_name: product-api
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      DB_HOST: productdb
+      DB_NAME: ProductDB98
+      DB_SA_PASSWORD: password@12345#
+    image: productwebapi
+    networks:
+      backend: null
+    ports:
+    - mode: ingress
+      target: 80
+      protocol: tcp
+    - mode: ingress
+      target: 5150
+      published: "5150"
+      protocol: tcp
+networks:
+  backend:
+    name: dockercompose16160269148051367733_backend
